@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-import seaborn as sns
 
 def initialLinearSetup(samples = 1000, features = 1):
     from sklearn.datasets import make_regression
