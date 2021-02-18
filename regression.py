@@ -6,7 +6,7 @@ import seaborn as sns
 def initialLinearSetup(samples = 1000, features = 1):
     from sklearn.datasets import make_regression
     
-    x, y = make_regression(n_samples=samples, n_features=features, noise=5.0)
+    x, y = make_regression(n_samples=samples, n_features=features, noise=10.0)
     df = pd.DataFrame(data=x)
     
     from sklearn.model_selection import train_test_split
@@ -79,10 +79,9 @@ def initialExampleDataSetup():
     
 def residualPlot(y_predict, title):
     plt.rcParams['figure.figsize'] = (6.0, 6.0)
-    preds = pd.DataFrame({"preds":y_predict, "true":y_train})
-    preds["residuals"] = preds["true"] - preds["preds"]
-    preds.plot(x = "preds", y = "residuals",kind = "scatter", marker='.')
-    # plt.plot(y, y, linestyle=':')
+    preds = pd.DataFrame({"Predicted Values":y_predict, "True":y_train})
+    preds["Residuals"] = preds["True"] - preds["Predicted Values"]
+    preds.plot(x = "Predicted Values", y = "Residuals",kind = "scatter", marker='.')
     plt.axhline(y=0, color='black', linestyle='-', linewidth = 1)
     plt.title(title)
     plt.show()
@@ -114,9 +113,6 @@ def scorePlot():
 def linearRegression():
     from sklearn.linear_model import LinearRegression
     model = LinearRegression()
-    
-    print(x_train)
-    print(y_train)
     
     model.fit(x_train,y_train)
     y_predict = model.predict(x_train)
@@ -153,14 +149,15 @@ def elasticNet():
     residualPlot(y_predict, "Residual plot in Elastic Net Regressor")
     score(y_predict, "Elastic Net")
     
-def decisionTreeRegression():   
+def decisionTreeRegression(depth):   
     from sklearn.tree import DecisionTreeRegressor
-    model = DecisionTreeRegressor(max_depth = 5)
+    
+    model = DecisionTreeRegressor(max_depth = depth)
     # model = DecisionTreeRegressor()
     model.fit(x_train, y_train)
     y_predict = model.predict(x_train)
     
-    residualPlot(y_predict, "Residual plot in Decision Tree Regressor")
+    residualPlot(y_predict, "Residual plot in Decision Tree Regressor for depth = " + str(depth))
     score(y_predict, "Decision Tree")
     
 def kNeighborsRegression():
@@ -193,7 +190,7 @@ def svmRegression(isCurve):
     
 if __name__ == "__main__":
     #Linear regression data
-    # df, x, y, train_data = initialLinearSetup()
+    df, x, y, train_data = initialLinearSetup()
     
     # Multiple linear regression data
     # df, x, y, train_data = initialLinearSetup(1000, 10)
@@ -202,7 +199,7 @@ if __name__ == "__main__":
     # df, x, y, train_data = initialCurveSetup()
     
     #Example data
-    df, x, y, train_data = initialExampleDataSetup() 
+    # df, x, y, train_data = initialExampleDataSetup() 
     
     
     x_train, x_test, y_train, y_test = train_data
@@ -215,7 +212,7 @@ if __name__ == "__main__":
     ridgeRegression()
     lassoRegression()
     elasticNet()
-    decisionTreeRegression()
+    decisionTreeRegression(5)
     kNeighborsRegression()
     
     # Performs better for linear
